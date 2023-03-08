@@ -2,20 +2,6 @@ import React, {useEffect, useRef} from "react";
 import styled from "styled-components";
 
 function GNB() {
-  const observRef = useRef<IntersectionObserver | null>(null);
-  const dateRef = useRef<HTMLElement>(null);
-  const handleOnScroll = () => {
-    console.log("success");
-  };
-
-  useEffect(() => {
-    observRef.current = new IntersectionObserver(handleOnScroll);
-    observRef.current.observe(dateRef.current!);
-    return () => {
-      if (observRef.current) observRef.current.disconnect();
-    };
-  });
-
   return (
     <>
       <GNBHeader>
@@ -29,7 +15,6 @@ function GNB() {
           </GNBMenus>
         </GNBContainer>
       </GNBHeader>
-      <span ref={dateRef}> test </span>
     </>
   );
 }
@@ -39,7 +24,11 @@ export default GNB;
 const GNBHeader = styled.div`
   width: 100%;
   height: 6rem;
+  background-color: white;
   border-bottom: 1px solid var(--colorBg1);
+  z-index: 10;
+  position: fixed;
+  top: 0;
 `;
 
 const GNBContainer = styled.div`
