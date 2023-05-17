@@ -1,17 +1,31 @@
-import React, {useEffect, useRef} from "react";
+import React, {SetStateAction, useEffect, useRef} from "react";
 import styled from "styled-components";
+import Calendar from "../components/Calendar";
+import NewsCards from "../components/NewsCards";
+import {FlexDiv, FlexBox} from "../styles/common";
+import sample from "../assets/sample.png";
+import sample2 from "../assets/sample2.png";
+import sample3 from "../assets/sample3.png";
+import sample4 from "../assets/sample4.png";
+import sample5 from "../assets/sample5.png";
+import {useMediaQuery} from "react-responsive";
 
-function MainPage() {
+function MainPage({setIsDateOn}: {setIsDateOn: React.Dispatch<SetStateAction<boolean>>}) {
   const observRef = useRef<IntersectionObserver | null>(null);
   const dateRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const handleOnScroll = (e: any) => {
-    console.log(e[0].isIntersecting, e[0].isVisible);
+    setIsDateOn(e[0].isIntersecting);
+  };
+
+  const Desktop = ({children}: {children: JSX.Element}) => {
+    const isDesktop = useMediaQuery({minWidth: 992});
+    return isDesktop ? children : null;
   };
 
   useEffect(() => {
     observRef.current = new IntersectionObserver(handleOnScroll, {
-      rootMargin: "-72px 0px 0px 0px",
+      rootMargin: "-100px 0px 0px 0px",
     });
     observRef.current.observe(dateRef.current!);
     return () => {
@@ -19,14 +33,29 @@ function MainPage() {
     };
   });
 
+  const test = <div>테스트입니다</div>;
+
   return (
     <TestDiv ref={containerRef}>
-      <CalendarIcon ref={dateRef}>
-        <CalendarTop></CalendarTop>
-        <CalendarBottom>{new Date().getDate()}</CalendarBottom>
-      </CalendarIcon>
-      <span> 오늘의 카카오</span>
-      <span>3월 8일 화요일 소식입니다</span>
+      <TitleContainer direction="column" gap={"1rem"}>
+        <CalendarIcon align="center" ref={dateRef}>
+          <Calendar></Calendar>
+          <MainTitle> 오늘의 카카오</MainTitle>
+        </CalendarIcon>
+        <MainTitle>3월 8일 화요일 소식입니다</MainTitle>
+      </TitleContainer>
+      <FlexDiv gap="20px">
+        <NewsCards imgURL={sample} width="600px" height="670px" />
+        <FlexDiv direction="column" gap="20px">
+          <NewsCards imgURL={sample2} width="280px" height="370px" />
+          <NewsCards imgURL={sample3} width="280px" height="170px" />
+        </FlexDiv>
+        <FlexDiv direction="column" gap="20px">
+          <NewsCards imgURL={sample4} width="280px" height="170px" />
+          <NewsCards imgURL={sample5} width="280px" height="370px" />
+        </FlexDiv>
+      </FlexDiv>
+      <Desktop children={test}></Desktop>
     </TestDiv>
   );
 }
@@ -35,53 +64,42 @@ export default MainPage;
 
 const TestDiv = styled.div`
   position: relative;
+  height: 3000px;
   top: 6rem;
-`;
-
-const CalendarIcon = styled.div`
-  margin: 50px 50px;
-`;
-
-const CalendarTop = styled.div`
-  width: 58px;
-  height: 20px;
-  margin-bottom: 1px;
-  background: #e0204e;
-  border-radius: 8px 8px 0 0;
-  box-shadow: 0 2px 3px -1px #333;
-  &::after {
-    content: "";
-    display: block;
-    position: relative;
-    left: 41px;
-    top: -1px;
-    width: 8px;
-    height: 8px;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 2px 2px 3px -1px #333;
+  margin: auto;
+  @media screen and (min-width: 768px) {
+    width: 630px;
   }
-  &::before {
-    content: "";
-    display: block;
-    position: relative;
-    left: 10px;
-    top: 7px;
-    width: 8px;
-    height: 8px;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 2px 2px 3px -1px #333;
+  @media screen and (min-width: 1024px) {
+    width: 952px;
+  }
+  @media screen and (min-width: 1440px) {
+    width: 1296px;
   }
 `;
-const CalendarBottom = styled.div`
-  width: 58px;
-  height: 43px;
-  line-height: 40px;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  background: #d7d9d7;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 3px -1px #333;
+
+export const CalendarIcon = styled.div<{
+  direction?: string;
+  justify?: string;
+  align?: string;
+  gap?: string;
+}>`
+  ${props => FlexBox(props.direction, props.justify, props.align)}
+`;
+
+const MainTitle = styled.span`
+  font-size: 2.5rem;
+  font-weight: 600;
+  font-family: "san-serif";
+`;
+
+const TitleContainer = styled.div<{
+  direction?: string;
+  justify?: string;
+  align?: string;
+  gap?: string;
+}>`
+  ${props => FlexBox(props.direction, props.justify, props.align)};
+  gap: 1rem;
+  margin: 4rem 0;
 `;

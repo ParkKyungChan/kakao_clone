@@ -1,18 +1,28 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
+import Calendar from "./Calendar";
 
-function GNB() {
+function GNB({isDateOn}: {isDateOn: boolean}) {
   return (
     <>
       <GNBHeader>
         <GNBContainer>
-          <LogoIcon>Kakao</LogoIcon>
-          <GNBMenus>
-            <MenuIcon>카카오</MenuIcon>
-            <MenuIcon>뉴스</MenuIcon>
-            <MenuIcon>기술과서비스</MenuIcon>
-            <MenuIcon>약속과책임</MenuIcon>
-          </GNBMenus>
+          {isDateOn ? (
+            <>
+              <LogoIcon>Kakao</LogoIcon>
+              <GNBMenus>
+                <MenuIcon>카카오</MenuIcon>
+                <MenuIcon>뉴스</MenuIcon>
+                <MenuIcon>기술과서비스</MenuIcon>
+                <MenuIcon>약속과책임</MenuIcon>
+              </GNBMenus>
+            </>
+          ) : (
+            <>
+              <Calendar />
+              <span>오늘의 카카오</span>
+            </>
+          )}
         </GNBContainer>
       </GNBHeader>
     </>
@@ -29,6 +39,7 @@ const GNBHeader = styled.div`
   z-index: 10;
   position: fixed;
   top: 0;
+  transition: 0.5s all;
 `;
 
 const GNBContainer = styled.div`
