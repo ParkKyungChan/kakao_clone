@@ -1,4 +1,4 @@
-import React, {SetStateAction, useEffect, useRef} from "react";
+import React, {SetStateAction, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import Calendar from "../components/Calendar";
 import NewsCards from "../components/NewsCards";
@@ -11,6 +11,8 @@ import sample5 from "../assets/sample5.png";
 import {useMediaQuery} from "react-responsive";
 
 function MainPage({setIsDateOn}: {setIsDateOn: React.Dispatch<SetStateAction<boolean>>}) {
+  const [todayMonth, setTodayMonth] = useState(0);
+  const [todayDate, setTodayDate] = useState(0);
   const observRef = useRef<IntersectionObserver | null>(null);
   const dateRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,11 @@ function MainPage({setIsDateOn}: {setIsDateOn: React.Dispatch<SetStateAction<boo
     };
   });
 
+  useEffect(() => {
+    setTodayDate(new Date().getDate());
+    setTodayMonth(new Date().getMonth());
+  });
+
   const test = <div>테스트입니다</div>;
 
   return (
@@ -42,7 +49,9 @@ function MainPage({setIsDateOn}: {setIsDateOn: React.Dispatch<SetStateAction<boo
           <Calendar></Calendar>
           <MainTitle> 오늘의 카카오</MainTitle>
         </CalendarIcon>
-        <MainTitle>3월 8일 화요일 소식입니다</MainTitle>
+        <MainTitle>
+          {todayMonth + 1}월 {todayDate}일 소식입니다
+        </MainTitle>
       </TitleContainer>
       <FlexDiv gap="20px">
         <NewsCards imgURL={sample} width="600px" height="670px" />
